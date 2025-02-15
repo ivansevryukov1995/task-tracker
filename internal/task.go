@@ -2,12 +2,14 @@ package internal
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 	"os"
 	"time"
 )
 
 type Task struct {
-	ID          uint      `json:"id"`
+	ID          uint      `json:"id,omitempty"`
 	Description string    `json:"description"`
 	Status      string    `json:"status" validate:"oneof=todo in-progress done"`
 	CreatedAt   time.Time `json:"created_at"`
@@ -16,11 +18,11 @@ type Task struct {
 
 type Tasks []Task
 
-func NewTask(id uint, desc string, status string) *Task {
+func NewTask(id uint, desc string) *Task {
 	return &Task{
 		ID:          id,
 		Description: desc,
-		Status:      status,
+		Status:      "todo",
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
@@ -29,30 +31,67 @@ func NewTask(id uint, desc string, status string) *Task {
 func (t *Tasks) Load(nameFile string) error {
 	data, err := os.ReadFile(nameFile)
 	if err != nil {
-		return err
+		return errors.Unwrap(err)
 	}
 
 	if err := json.Unmarshal(data, t); err != nil {
-		return err
+		return errors.Unwrap(err)
 	}
+
 	return nil
 }
 
-func (t *Tasks) Add(id uint, desc string) error {
+func (t *Tasks) Unload(nameFile string) error {
+	data, err := json.Marshal(t)
+	if err != nil {
+		return errors.Unwrap(err)
+	}
 
-	task := NewTask(id, desc, "todo")
+	if err := os.WriteFile(nameFile, data, 0644); err != nil {
+		return errors.Unwrap(err)
+	}
+
+	return nil
+}
+
+func (t *Tasks) Add(desc string) (id uint, err error) {
+	if len(*t) != 0 {
+		lastTask := (*t)[len(*t)-1]
+		id = uint(lastTask.ID + 1)
+	} else {
+		id = 1
+	}
+
+	task := NewTask(id, desc)
 
 	*t = append(*t, *task)
-	return nil
+
+	return id, nil
 }
 
 func (t *Tasks) Delete(id uint) error {
-	t[]
-	*t = append(*t[:id], *t[id+1:]...)
+	ind := -1
+	for i, task := range *t {
+		if task.ID == id {
+			ind = i
+			break
+		}
+	}
+	if ind == -1 {
+		return fmt.Errorf("Task ID=%v not exists", id)
+	}
+	*t = append((*t)[:ind], (*t)[ind+1:]...)
 	return nil
 }
 
-func (t *Tasks) Update(task Task) error {
-	// TODO:
+func (t *Tasks) UpdateStatus(id uint, status string) error {
+	for i, task := range *t {
+		if task.ID == id {
+			(*t)[i].Status = status
+			(*t)[i].UpdatedAt = time.Now()
+			break
+		}
+	}
+
 	return nil
 }
