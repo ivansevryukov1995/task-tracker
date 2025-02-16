@@ -48,21 +48,21 @@ func main() {
 		fmt.Println(errors.Unwrap(err))
 	}
 
-	if err := tasks.Delete(8); err != nil {
-		fmt.Println(err)
-	}
+	// if err := tasks.Delete(8); err != nil {
+	// 	fmt.Println(err)
+	// }
 
-	if err := tasks.Unload(jsonFile); err != nil {
-		fmt.Println(errors.Unwrap(err))
-	}
+	// if err := tasks.Unload(jsonFile); err != nil {
+	// 	fmt.Println(errors.Unwrap(err))
+	// }
 
-	if err := tasks.UpdateStatus(6, "done"); err != nil {
-		fmt.Println(errors.Unwrap(err))
-	}
+	// if err := tasks.UpdateStatus(6, "done"); err != nil {
+	// 	fmt.Println(errors.Unwrap(err))
+	// }
 
-	if err := tasks.Unload(jsonFile); err != nil {
-		fmt.Println(errors.Unwrap(err))
-	}
+	// if err := tasks.Unload(jsonFile); err != nil {
+	// 	fmt.Println(errors.Unwrap(err))
+	// }
 
 	fmt.Println(tasks)
 }

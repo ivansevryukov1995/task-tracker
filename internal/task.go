@@ -18,9 +18,8 @@ type Task struct {
 
 type Tasks []Task
 
-func NewTask(id uint, desc string) *Task {
+func NewTask(desc string) *Task {
 	return &Task{
-		ID:          id,
 		Description: desc,
 		Status:      "todo",
 		CreatedAt:   time.Now(),
@@ -54,21 +53,25 @@ func (t *Tasks) Unload(nameFile string) error {
 	return nil
 }
 
-func (t *Tasks) Add(desc string) (id uint, err error) {
+// The method adds a task to the general task list
+func (t *Tasks) Add(desc string) (uint, error) {
+	var id uint
 	if len(*t) != 0 {
-		lastTask := (*t)[len(*t)-1]
-		id = uint(lastTask.ID + 1)
+		id = (*t)[len(*t)-1].ID + 1
 	} else {
 		id = 1
 	}
 
-	task := NewTask(id, desc)
+	task := NewTask(desc)
+
+	task.ID = id
 
 	*t = append(*t, *task)
 
 	return id, nil
 }
 
+// The method deletes the issue by the specified ID.
 func (t *Tasks) Delete(id uint) error {
 	ind := -1
 	for i, task := range *t {
@@ -84,10 +87,25 @@ func (t *Tasks) Delete(id uint) error {
 	return nil
 }
 
+// The method updates the task status by the id number.
+// The todo, in-progress, and done statuses are available.
 func (t *Tasks) UpdateStatus(id uint, status string) error {
 	for i, task := range *t {
 		if task.ID == id {
 			(*t)[i].Status = status
+			(*t)[i].UpdatedAt = time.Now()
+			break
+		}
+	}
+
+	return nil
+}
+
+// The method updates the task description by the identification number.
+func (t *Tasks) UpdateDescription(id uint, desc string) error {
+	for i, task := range *t {
+		if task.ID == id {
+			(*t)[i].Description = desc
 			(*t)[i].UpdatedAt = time.Now()
 			break
 		}
