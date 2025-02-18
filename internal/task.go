@@ -104,3 +104,13 @@ func (t *Tasks) UpdateDescription(id uint, desc string) error {
 
 	return nil
 }
+
+func (t *Tasks) List(status string) {
+	for _, task := range *t {
+		// fmt.Printf("%v  %v  %v  %v %v  %v\n", task.ID, task.Description, task.Status, task.CreatedAt.Year(), task.CreatedAt.Month(), task.UpdatedAt)
+		fmt.Println(status)
+		if task.Status == status {
+			fmt.Printf("%v  %v  %v  %v.%v.%v  %v\n", task.ID, task.Description, task.Status, task.CreatedAt.Year(), task.CreatedAt.Month(), task.CreatedAt.Day(), task.UpdatedAt)
+		}
+	}
+}

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/ivansevryukov1995/Task-Tracker/internal/"
+	"github.com/ivansevryukov1995/Task-Tracker/internal"
 )
 
 const jsonFile = "task-tracker.json"
@@ -18,7 +18,7 @@ func main() {
 	}
 
 	cmdFlags := internal.NewCmdFlags()
-	cmdFlags.Execute(&tasks)
+	cmdFlags.Parse(&tasks)
 
 	if err := tasks.Unload(jsonFile); err != nil {
 		fmt.Println(errors.Unwrap(err))
