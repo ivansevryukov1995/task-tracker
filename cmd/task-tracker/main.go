@@ -18,7 +18,7 @@ func main() {
 	}
 
 	cmdFlags := internal.NewCmdFlags()
-	cmdFlags.Parse(&tasks)
+	cmdFlags.ExecuteCmd(&tasks)
 
 	if err := tasks.Unload(jsonFile); err != nil {
 		fmt.Println(errors.Unwrap(err))

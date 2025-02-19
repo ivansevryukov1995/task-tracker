@@ -41,11 +41,11 @@ func (t *Tasks) Unload(nameFile string) error {
 		return err
 	}
 
-	return os.WriteFile(nameFile, data, 0644)
+	return os.WriteFile(nameFile, data, 0777)
 }
 
 // The method adds a task to the general task list
-func (t *Tasks) Add(desc string) (uint, error) {
+func (t *Tasks) Add(desc string) uint {
 	var id uint
 	if len(*t) != 0 {
 		id = (*t)[len(*t)-1].ID + 1
@@ -54,12 +54,11 @@ func (t *Tasks) Add(desc string) (uint, error) {
 	}
 
 	task := NewTask(desc)
-
 	task.ID = id
 
 	*t = append(*t, *task)
 
-	return id, nil
+	return id
 }
 
 // The method deletes the issue by the specified ID.

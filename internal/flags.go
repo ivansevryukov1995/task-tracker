@@ -3,6 +3,7 @@ package internal
 import (
 	"errors"
 	"flag"
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -16,47 +17,53 @@ type CmdFlags struct {
 }
 
 func NewCmdFlags() *CmdFlags {
-	cmdFlags := &CmdFlags{
-		Add:         *flag.String("add", "", "Adding a new task"),
-		Update:      *flag.String("update", "", "Updating task"),
-		Delete:      *flag.Uint("delete", 0, "Deleting task"),
-		Mark_status: *flag.String("mark", "", "Marking a task as in progress or done"),
-		List:        *flag.String("list", "", "Listing all tasks or listing tasks by status"),
-	}
+	cmdFlags := &CmdFlags{}
+	flag.StringVar(&cmdFlags.Add, "add", "", "Adding a new task")
+	flag.StringVar(&cmdFlags.Update, "update", "", "Updating task.  Use format:  ID \"new description\"")
+	flag.UintVar(&cmdFlags.Delete, "delete", 0, "Deleting task")
+	flag.StringVar(&cmdFlags.Mark_status, "mark", "", "Marking a task as in progress or done")
+	flag.StringVar(&cmdFlags.List, "list", "", "Listing all tasks or listing tasks by status")
 
 	flag.Parse()
 
 	return cmdFlags
 }
 
-func (cf *CmdFlags) Parse(tasks *Tasks) error {
+func (cf *CmdFlags) ExecuteCmd(tasks *Tasks) error {
 	switch {
 	case cf.Add != "":
-		tasks.Add(cf.Add)
-	case cf.Update != "":
-		args := strings.SplitN(cf.Update, " ", 0)
+		fmt.Printf("Task added successfully (ID: %v)\n", tasks.Add(cf.Add))
 
-		ind, err := strconv.Atoi(args[0])
+		return nil
+	case cf.Update != "":
+		parts := strings.SplitN(cf.Update, " ", 2) // Split into two parts maximum
+		values := flag.Args()
+
+		id, err := strconv.Atoi(parts[0])
 		if err != nil {
-			return errors.Unwrap(err)
+			return fmt.Errorf("invalid ID: %w", err)
 		}
 
-		tasks.UpdateDescription(uint(ind), args[1])
+		return tasks.UpdateDescription(uint(id), strings.Join(values, " "))
 	case cf.Delete != 0:
 		tasks.Delete(cf.Delete)
-	case cf.Update != "":
-		args := strings.SplitN(cf.Update, " ", 0)
-
+		return nil
+	case cf.Mark_status != "":
+		args := strings.SplitN(cf.Mark_status, " ", 2)
+		if len(args) < 2 {
+			return errors.New("mark_status requires task ID and status")
+		}
 		ind, err := strconv.Atoi(args[0])
 		if err != nil {
-			return errors.Unwrap(err)
+			return err
 		}
-
-		tasks.UpdateStatus(uint(ind), args[1])
+		return tasks.UpdateStatus(uint(ind), args[1])
 	case cf.List != "":
 
 		tasks.List(cf.List)
-
+		return nil
+	default:
+		flag.PrintDefaults()
+		return errors.New("no command specified")
 	}
-	return nil
 }
