@@ -59,7 +59,7 @@ func (t *Tasks) Delete(id uint) error {
 
 // The method updates the task status by the id number.
 // The todo, in-progress, and done statuses are available.
-func (t *Tasks) UpdateStatus(id uint, status string) error {
+func (t *Tasks) UpdateStatus(id uint, status string) {
 	for i, task := range *t {
 		if task.ID == id {
 			(*t)[i].Status = status
@@ -67,12 +67,10 @@ func (t *Tasks) UpdateStatus(id uint, status string) error {
 			break
 		}
 	}
-
-	return nil
 }
 
 // The method updates the task description by the identification number.
-func (t *Tasks) UpdateDescription(id uint, desc string) error {
+func (t *Tasks) UpdateDescription(id uint, desc string) {
 	for i, task := range *t {
 		if task.ID == id {
 			(*t)[i].Description = desc
@@ -80,8 +78,6 @@ func (t *Tasks) UpdateDescription(id uint, desc string) error {
 			break
 		}
 	}
-
-	return nil
 }
 
 func (t *Tasks) List(status string) {

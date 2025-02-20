@@ -16,7 +16,7 @@ func main() {
 
 	if err := storage.Load(&tasks); err != nil {
 		fmt.Println(errors.Unwrap(err))
-		fmt.Printf("File %v will be created.\n", jsonFileName)
+		fmt.Printf("File %v will be automatically created when you add the task with the --add command.\n", jsonFileName)
 	}
 
 	cmdFlags := internal.NewCmdFlags()
