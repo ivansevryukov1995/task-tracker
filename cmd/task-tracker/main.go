@@ -7,20 +7,22 @@ import (
 	"github.com/ivansevryukov1995/Task-Tracker/internal"
 )
 
-const jsonFile = "task-tracker.json"
+const jsonFileName = "task-tracker.json"
 
 func main() {
 	var tasks internal.Tasks
 
-	if err := tasks.Load(jsonFile); err != nil {
+	storage := internal.NewStorage(jsonFileName)
+
+	if err := storage.Load(&tasks); err != nil {
 		fmt.Println(errors.Unwrap(err))
-		fmt.Printf("File %v will be created.\n", jsonFile)
+		fmt.Printf("File %v will be created.\n", jsonFileName)
 	}
 
 	cmdFlags := internal.NewCmdFlags()
 	cmdFlags.ExecuteCmd(&tasks)
 
-	if err := tasks.Unload(jsonFile); err != nil {
+	if err := storage.Save(&tasks); err != nil {
 		fmt.Println(errors.Unwrap(err))
 	}
 

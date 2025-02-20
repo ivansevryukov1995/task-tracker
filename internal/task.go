@@ -1,9 +1,7 @@
 package internal
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
 	"time"
 )
 
@@ -24,24 +22,6 @@ func NewTask(desc string) *Task {
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
-}
-
-func (t *Tasks) Load(nameFile string) error {
-	data, err := os.ReadFile(nameFile)
-	if err != nil {
-		return err
-	}
-
-	return json.Unmarshal(data, t)
-}
-
-func (t *Tasks) Unload(nameFile string) error {
-	data, err := json.Marshal(t)
-	if err != nil {
-		return err
-	}
-
-	return os.WriteFile(nameFile, data, 0777)
 }
 
 // The method adds a task to the general task list
