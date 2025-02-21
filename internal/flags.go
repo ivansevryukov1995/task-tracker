@@ -4,13 +4,12 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"strconv"
 	"strings"
 )
 
 type CmdFlags struct {
 	Add            string
-	Update         string
+	Update         uint
 	Delete         uint
 	MarkInProgress uint
 	MarkDone       uint
@@ -20,7 +19,7 @@ type CmdFlags struct {
 func NewCmdFlags() *CmdFlags {
 	cmdFlags := &CmdFlags{}
 	flag.StringVar(&cmdFlags.Add, "add", "", "Adding a new task")
-	flag.StringVar(&cmdFlags.Update, "update", "", "Updating task. Use format: ID \"new description\" or ID new description")
+	flag.UintVar(&cmdFlags.Update, "update", 0, "Updating task. Use format: ID new description")
 	flag.UintVar(&cmdFlags.Delete, "delete", 0, "Deleting task")
 	flag.UintVar(&cmdFlags.MarkInProgress, "mark-in-progress", 0, "Marking a task as in progress")
 	flag.UintVar(&cmdFlags.MarkDone, "mark-done", 0, "Marking a task as done")
@@ -37,16 +36,8 @@ func (cf *CmdFlags) ExecuteCmd(tasks *Tasks) error {
 		fmt.Printf("Task added successfully (ID: %v)\n", tasks.Add(cf.Add))
 		return nil
 
-	case cf.Update != "":
-		parts := strings.SplitN(cf.Update, " ", 2) // Split into two parts maximum
-		desc := flag.Args()
-
-		id, err := strconv.Atoi(parts[0])
-		if err != nil {
-			return fmt.Errorf("invalid ID: %w", err)
-		}
-
-		tasks.UpdateDescription(uint(id), strings.Join(desc, " "))
+	case cf.Update != 0:
+		tasks.UpdateDescription(cf.Update, strings.Join(flag.Args(), " "))
 		return nil
 
 	case cf.Delete != 0:
