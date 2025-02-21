@@ -19,7 +19,9 @@ func main() {
 	}
 
 	cmdFlags := internal.NewCmdFlags()
-	cmdFlags.ExecuteCmd(&tasks)
+	if err := cmdFlags.ExecuteCmd(&tasks); err != nil {
+		log.Fatalf("Flag not valid: %v", err)
+	}
 
 	if err := storage.Save(&tasks); err != nil {
 		log.Fatalf("Error save task: %v", err)

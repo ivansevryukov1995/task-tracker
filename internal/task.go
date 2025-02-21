@@ -81,11 +81,15 @@ func (t *Tasks) UpdateDescription(id uint, desc string) {
 }
 
 func (t *Tasks) List(status string) {
+	fmt.Printf("%-5s %-30s %-15s %-15s %-15s\n", "ID", "Description", "Status", "CreatedAt", "UpdatedAt")
 	for _, task := range *t {
-		// fmt.Printf("%v  %v  %v  %v %v  %v\n", task.ID, task.Description, task.Status, task.CreatedAt.Year(), task.CreatedAt.Month(), task.UpdatedAt)
-		fmt.Println(status)
-		if task.Status == status {
-			fmt.Printf("%v  %v  %v  %v.%v.%v  %v\n", task.ID, task.Description, task.Status, task.CreatedAt.Year(), task.CreatedAt.Month(), task.CreatedAt.Day(), task.UpdatedAt)
+		if task.Status == status || status == "" {
+			fmt.Printf("%-5d %-30s %-15s %-15s %-15s\n",
+				task.ID,
+				task.Description,
+				task.Status,
+				task.CreatedAt.Format("02.01.2006"),
+				task.UpdatedAt.Format("02.01.2006"))
 		}
 	}
 }
