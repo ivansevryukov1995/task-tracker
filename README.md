@@ -1,41 +1,52 @@
 # Task-Tracker
 
 <a id='anchor'></a>
-# CLI Application Task Tracker
-Этот репозиторий является списком выполненных заданий [project](https://roadmap.sh/projects/task-tracker) с сайта roadmap.sh
-за авторством [Василия Романова](https://github.com/rvasily).
+## CLI Application Task Tracker
+Task tracker is a [application](https://roadmap.sh/projects/task-tracker) used to track and manage your tasks.
 
-<img src=1\testdata\project\gopher.png height="200" width="200">
 
-1. [Программа вывода дерева файлов](https://github.com/ivansevryukov1995/golang_web_services_course/tree/main/1)
-<details><summary>Result:</summary>
+## Features
 
+- **Add a Task:** Add a new task with a description.
+- **Update a Task:** Update the description of an existing task.
+- **Delete a Task:** Remove a task by its ID.
+- **Mark a Task:** Mark a task as "in progress" or "done."
+- **List Tasks:** List all tasks or filter them by status (e.g., `todo`, `in progress`, `done`).
+
+## How to run
+
+Clone the repository and run the following command:
+
+```bash
+git clone https://github.com/arikchakma/backend-projects.git
+cd backend-projects/task-tracker
 ```
-=== RUN   TestTreeFull
---- PASS: TestTreeFull (0.00s)
-=== RUN   TestTreeDir
---- PASS: TestTreeDir (0.00s)
-PASS
-ok      hw      0.157s
-```
-</details>
 
-2. [Асинхронный пайплайн](https://github.com/ivansevryukov1995/golang_web_services_course/tree/main/2)
-<details><summary>Result:</summary>
+Run the following command to build and run the project:
 
-```
-=== RUN   TestByIlia
-collected 3
-collected 9
-collected 12
---- PASS: TestByIlia (0.30s)
-=== RUN   TestPipeline
---- PASS: TestPipeline (0.01s)
-=== RUN   TestSigner
---- PASS: TestSigner (2.07s)
-PASS
-ok      2       2.565s
-```
-</details>
+```bash
+go build -o task-tracker
+./task-tracker --help # To see the list of available commands
 
-[Вверх](#anchor)
+# To add a task
+./task-tracker add "Buy groceries"
+
+# To update a task
+./task-tracker update 1 "Buy groceries and cook dinner"
+
+# To delete a task
+./task-tracker delete 1
+
+# To mark a task as in progress/done/todo
+./task-tracker mark-in-progress 1
+./task-tracker mark-done 1
+./task-tracker mark-todo 1
+
+# To list all tasks
+./task-tracker list
+./task-tracker list done
+./task-tracker list todo
+./task-tracker list in-progress
+```
+
+[Up](#anchor)
