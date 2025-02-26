@@ -18,6 +18,7 @@ Clone the repository and run the following command:
 
 ```bash
 git clone https://github.com/ivansevryukov1995/Task-Tracker.git
+cd Task-Tracker
 ```
 
 Run the following command to build and run the project:
@@ -48,7 +49,7 @@ go build -o task-tracker
 ./task-tracker mark-done 1
 
 # To list all tasks
-./task-tracker list "" # windows
+./task-tracker list= 
 ./task-tracker list done
 ./task-tracker list todo
 ./task-tracker list in-progress
