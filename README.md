@@ -17,8 +17,8 @@ Task tracker is a [application](https://roadmap.sh/projects/task-tracker) used t
 Clone the repository and run the following command:
 
 ```bash
-git clone https://github.com/ivansevryukov1995/Task-Tracker.git
-cd Task-Tracker
+git clone https://github.com/ivansevryukov1995/task-tracker.git
+cd task-tracker
 ```
 
 Run the following command to build and run the project:
